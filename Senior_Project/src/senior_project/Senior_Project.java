@@ -188,9 +188,7 @@ public class Senior_Project extends JFrame {
                             "  \n" +
                             "  </body>\n" +
                             "</html>");
-        areaDrag3.setText(".container{\n"
-                + "  \n"
-                + "}\n");
+        areaDrag3.setText("<!--COMMENT-->>");
         
         areaDrag.setEditable(false);
         areaDrag1.setEditable(false);
