@@ -1,0 +1,48 @@
+align-content: -webkit-align-content:
+align-items: -webkit-align-items:
+align-self: -webkit-align-self:
+animation: -webkit-animation:
+animation-delay: -webkit-animation-delay:
+animation-direction: -webkit-animation-direction:
+animation-duration: -webkit-animation-duration:
+animation-fill-mode: -webkit-animation-fill-mode:
+animation-iteration-count: -webkit-animation-iteration-count:
+animation-name: -webkit-animation-name:
+animation-play-state: -webkit-animation-play-state:
+animation-timing-function: -webkit-animation-timing-function:
+backface-visibility: -webkit-backface-visibility:
+border-image: -o-border-image: -webkit-border-image:
+border-radius: -moz-border-radius: -webkit-border-radius:
+column-count: -moz-column-count: -webkit-column-count:
+column-fill: -moz-column-fill:
+column-gap: -moz-column-gap: -webkit-column-gap:
+column-rule: -moz-column-rule: -webkit-column-rule:
+column-rule-color: -moz-column-rule-color: -webkit-column-rule-color:
+column-rule-style: -moz-column-rule-style: -webkit-column-rule-style:
+column-rule-width: -moz-column-rule-width: -webkit-column-rule-width:
+column-span: -webkit-column-span:
+column-width: -moz-column-width: -webkit-column-width:
+columns: -moz-columns: -webkit-columns:
+filter: -webkit-filter:
+flex: -ms-flex: -webkit-flex:
+flex-basis: -webkit-flex-basis:
+flex-direction: -webkit-flex-direction:
+flex-flow: -webkit-flex-flow:
+flex-grow: -webkit-flex-grow:
+flex-shrink: -webkit-flex-shrink:
+flex-wrap: -webkit-flex-wrap:
+justify-content: -webkit-justify-content:
+keyframes: -webkit-keyframes:
+@keyframes: @-webkit-keyframes:
+order: -webkit-order:
+perspective: -webkit-perspective:
+perspective-origin: -webkit-perspective-origin:
+tab-size: -o-tab-size: -moz-tab-size:
+text-align-last: -moz-text-align-last:
+text-decoration-color: -moz-text-decoration-color:
+text-decoration-line: -moz-text-decoration-line:
+transform: -webkit-transform: -ms-transform:
+transform-origin: -webkit-transform-origin: -ms-transform-origin:
+transform-style: -webkit-transform-style:
+transition: -webkit-transition:
+transition-delay: -webkit-transition-delay:
