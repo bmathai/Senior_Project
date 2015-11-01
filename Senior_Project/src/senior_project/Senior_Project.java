@@ -546,14 +546,26 @@ public class Senior_Project extends JFrame {
         @Override
         public synchronized void mousePressed(MouseEvent e) {
            //drag and drop text
-            System.out.println("Mouse pressed " + e.getButton());
+           System.out.println("Mouse pressed " + e.getButton());
            JComponent jc = (JComponent)e.getSource();
            TransferHandler th = jc.getTransferHandler();
+           areaDrag.setEnabled(false);
+           areaDrag1.setEnabled(false);
+           areaDrag2.setEnabled(false);
+           areaDrag3.setEnabled(false);
            th.exportAsDrag(jc, e, TransferHandler.COPY);
         }
         @Override
         public synchronized void mouseClicked(MouseEvent e) {
             
+        }
+        
+        @Override
+        public synchronized void mouseReleased(MouseEvent e) {
+           areaDrag.setEnabled(true);
+           areaDrag1.setEnabled(true);
+           areaDrag2.setEnabled(true);
+           areaDrag3.setEnabled(true);
         }
     };
     
