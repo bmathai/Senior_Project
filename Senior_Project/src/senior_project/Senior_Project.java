@@ -54,7 +54,7 @@ public class Senior_Project extends JFrame {
         clipboard[2] = "";
     }
 
-    public void Editor() {
+    public void Editor() {      
         area.setBorder(new CompoundBorder(
             BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
             BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white))
@@ -341,6 +341,11 @@ public class Senior_Project extends JFrame {
                         area.insert(selectedValue, area.getCaretPosition());
                     }
                 }
+                //find/replace function
+                else if(pressed.contains(17) && pressed.contains(70)){
+                    MultiHighlight mh = new MultiHighlight(area, "aeiouAEIOU");
+                    mh.highlight();
+                }
             }
         }
         @Override
@@ -577,6 +582,10 @@ public class Senior_Project extends JFrame {
            if(e.getButton() == 3){
                rightClickBox();
            }
+           if(e.getButton() == 1){
+               //MultiHighlight mh = new MultiHighlight(area, "aeiouAEIOU");
+                   // mh.highlight();
+           }
         }
         
         @Override
@@ -586,7 +595,12 @@ public class Senior_Project extends JFrame {
         
         @Override
         public synchronized void mouseReleased(MouseEvent e) {
-            
+            if (area.getSelectedText() != null){ //see if they selected something 
+                String s = area.getSelectedText();
+                MultiHighlight mh = new MultiHighlight(area, s);
+                    mh.highlight();
+                    
+            }
         }
         
         @Override
