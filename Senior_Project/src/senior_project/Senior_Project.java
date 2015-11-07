@@ -7,6 +7,7 @@ package senior_project;
 
 import java.awt.*;
 import java.*;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.io.*;
 import java.util.HashSet;
@@ -31,10 +32,10 @@ public class Senior_Project extends JFrame {
     public JTextPane area = new JTextPane();
     public StyledDocument doc = area.getStyledDocument();
     private final SyntaxHighlight syntaxhighlight = new SyntaxHighlight();
-    public JTextArea areaDrag = new JTextArea();
-    public JTextArea areaDrag1 = new JTextArea();
-    public JTextArea areaDrag2 = new JTextArea();
-    public JTextArea areaDrag3 = new JTextArea();
+    private final JTextArea areaDrag = new JTextArea();
+    private final JTextArea areaDrag1 = new JTextArea();
+    private final JTextArea areaDrag2 = new JTextArea();
+    private final JTextArea areaDrag3 = new JTextArea();
     public JPanel dragPanel = new JPanel();
     public Boolean dragPanelVisible = true;
     public Boolean dragPanelEdit = false;
@@ -64,8 +65,8 @@ public class Senior_Project extends JFrame {
         );
         area.setFont(new Font("Verdana", Font.PLAIN, 12));
         area.setBackground(Color.white);
-        area.setForeground(Color.getHSBColor(49, (float) 0.12, (float) .14));
-        area.setCaretColor(Color.getHSBColor((float) .70, (float) .40, (float) .20));
+        area.setForeground(Color.DARK_GRAY.darker());
+        area.setCaretColor(Color.magenta);
         //area.setTabSize(2);
         JScrollPane scroll = new JScrollPane(area, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -77,22 +78,22 @@ public class Senior_Project extends JFrame {
         DefaultSyntaxKit.initKit();
         //custom look for menu bar
         //removeborders
-        UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Color.getHSBColor((float) .70, (float) .40, (float) .20)));
+        UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Color.DARK_GRAY.darker().darker()));
         UIManager.put("Menu.border", BorderFactory.createLineBorder(Color.white, 0));
         UIManager.put("MenuItem.border", BorderFactory.createLineBorder(Color.white, 0));
-        JMB.setBorder(BorderFactory.createLineBorder(Color.getHSBColor((float) .70, (float) .40, (float) .20), 4));
+        JMB.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY.darker().darker(), 4));
         //set backgrounds
-        JMB.setBackground(Color.getHSBColor((float) .70, (float) .40, (float) .20));
-        UIManager.put("MenuItem.background", Color.getHSBColor((float) .70, (float) .40, (float) .20));
+        JMB.setBackground(Color.DARK_GRAY.darker().darker());
+        UIManager.put("MenuItem.background", Color.DARK_GRAY.darker().darker());
         UIManager.put("MenuItem.foreground", Color.white);
         //set selection backgrounds
         UIManager.put("Menu.selectionBackground", Color.white);
         UIManager.put("MenuItem.selectionBackground", Color.white);
         //set text color
-        UIManager.put("MenuItem.selectionForeground", Color.getHSBColor((float) .70, (float) .40, (float) .20));
+        UIManager.put("MenuItem.selectionForeground", Color.DARK_GRAY.darker().darker());
         UIManager.put("Menu.foreground", Color.white);
         //set outlines
-        UIManager.put("MenuItem.border", BorderFactory.createLineBorder(Color.getHSBColor((float) .70, (float) .40, (float) .20), 4));
+        UIManager.put("MenuItem.border", BorderFactory.createLineBorder(Color.DARK_GRAY.darker().darker(), 4));
         UIManager.put("Menu.selectionBorder", BorderFactory.createLineBorder(Color.white, 4));
 
 
@@ -168,10 +169,20 @@ public class Senior_Project extends JFrame {
         areaDrag3.addMouseListener(mDrag);
         areaDrag3.setTransferHandler(new TransferHandler("text"));
         
-        areaDrag.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        areaDrag1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        areaDrag2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        areaDrag3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        areaDrag.getDropTarget().setActive(false);
+        areaDrag1.getDropTarget().setActive(false);
+        areaDrag2.getDropTarget().setActive(false);
+        areaDrag3.getDropTarget().setActive(false);
+        
+        areaDrag.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        areaDrag1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        areaDrag2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        areaDrag3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        
+        areaDrag.setFont(new Font("Verdana", Font.PLAIN, 12));
+        areaDrag1.setFont(new Font("Verdana", Font.PLAIN, 12));
+        areaDrag2.setFont(new Font("Verdana", Font.PLAIN, 12));
+        areaDrag3.setFont(new Font("Verdana", Font.PLAIN, 12));
         
         areaDrag.setText(".html, body, p{\n"
                 + "  padding: 0;\n"
@@ -215,7 +226,7 @@ public class Senior_Project extends JFrame {
         panel.setLayout(new BorderLayout());
         dragPanel.setLayout(new BoxLayout(dragPanel, BoxLayout.Y_AXIS));
         dragPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        dragPanel.setBackground( Color.getHSBColor((float) .70, (float) .40, (float) .20));
+        dragPanel.setBackground( Color.DARK_GRAY.darker().darker());
         dragPanel.setForeground(Color.white);
         panel.add(new JScrollPane(scroll));
         
@@ -301,7 +312,7 @@ public class Senior_Project extends JFrame {
     }
     
     private void changeTheme(){
-        Font font = new Font("Verdana", Font.BOLD, 12);
+        Font font = new Font("Verdana", Font.PLAIN, 12);
         area.setFont(font);
         area.setForeground(Color.WHITE);
         area.setBackground(Color.DARK_GRAY.darker());
@@ -598,30 +609,31 @@ public class Senior_Project extends JFrame {
         }
     };
     
+    
     private MouseListener mDrag = new MouseAdapter(){
         @Override
         public synchronized void mousePressed(MouseEvent e) {
            //drag and drop text
+           
            System.out.println("Mouse pressed " + e.getButton());
            JComponent jc = (JComponent)e.getSource();
            TransferHandler th = jc.getTransferHandler();
-           areaDrag.setEnabled(false);
-           areaDrag1.setEnabled(false);
-           areaDrag2.setEnabled(false);
-           areaDrag3.setEnabled(false);
            th.exportAsDrag(jc, e, TransferHandler.COPY);
-        }
-        @Override
-        public synchronized void mouseClicked(MouseEvent e) {
-            
-        }
-        
-        @Override
-        public synchronized void mouseReleased(MouseEvent e) {
+           
            areaDrag.setEnabled(true);
            areaDrag1.setEnabled(true);
            areaDrag2.setEnabled(true);
            areaDrag3.setEnabled(true);
+           
+        }
+        @Override
+        public synchronized void mouseClicked(MouseEvent e) {
+
+        }
+        
+        @Override
+        public synchronized void mouseReleased(MouseEvent e) {
+            
         }
     };
     
