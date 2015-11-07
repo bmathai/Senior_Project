@@ -20,6 +20,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import jsyntaxpane.*;
 /**
  *
@@ -28,14 +29,12 @@ import jsyntaxpane.*;
 public class Senior_Project extends JFrame {
     
     private JPopupMenu popup;
-
+    private final Border emptyBorder = BorderFactory.createEmptyBorder();
+    private final boolean theme = true;
     public JTextPane area = new JTextPane();
     public StyledDocument doc = area.getStyledDocument();
     private final SyntaxHighlight syntaxhighlight = new SyntaxHighlight();
-    private final JTextArea areaDrag = new JTextArea();
-    private final JTextArea areaDrag1 = new JTextArea();
-    private final JTextArea areaDrag2 = new JTextArea();
-    private final JTextArea areaDrag3 = new JTextArea();
+    private final JTextArea[] areaDrag = new JTextArea[4];
     public JPanel dragPanel = new JPanel();
     public Boolean dragPanelVisible = true;
     public Boolean dragPanelEdit = false;
@@ -56,9 +55,15 @@ public class Senior_Project extends JFrame {
         clipboard[0] = "";
         clipboard[1] = "";
         clipboard[2] = "";
+        areaDrag[0] = new JTextArea();
+        areaDrag[1] = new JTextArea();
+        areaDrag[2] = new JTextArea();
+        areaDrag[3] = new JTextArea();
+        area.setBorder(null);
+        area.setBorder(emptyBorder);
     }
 
-    public void Editor() {      
+    public void Editor() {
         area.setBorder(new CompoundBorder(
             BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
             BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white))
@@ -69,12 +74,14 @@ public class Senior_Project extends JFrame {
         area.setCaretColor(Color.magenta);
         //area.setTabSize(2);
         JScrollPane scroll = new JScrollPane(area, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        scroll.setBorder(emptyBorder);
+        scroll.setBorder(null);
         TextLineNumber tln = new TextLineNumber(area);
         scroll.setRowHeaderView(tln);
         add(scroll, BorderLayout.CENTER);
 
         JMenuBar JMB = new JMenuBar();
+        JMB.setBorder(emptyBorder);
         DefaultSyntaxKit.initKit();
         //custom look for menu bar
         //removeborders
@@ -160,41 +167,26 @@ public class Senior_Project extends JFrame {
         setTitle("Lavender Editor - " + currentFile);
         setVisible(true);
         
-        areaDrag.addMouseListener(mDrag);
-        areaDrag.setTransferHandler(new TransferHandler("text"));
-        areaDrag1.addMouseListener(mDrag);
-        areaDrag1.setTransferHandler(new TransferHandler("text"));
-        areaDrag2.addMouseListener(mDrag);
-        areaDrag2.setTransferHandler(new TransferHandler("text"));
-        areaDrag3.addMouseListener(mDrag);
-        areaDrag3.setTransferHandler(new TransferHandler("text"));
+        for(int i = 0; i < areaDrag.length; i++){
+            areaDrag[i].addMouseListener(mDrag);
+            areaDrag[i].setTransferHandler(new TransferHandler("text"));
+            areaDrag[i].getDropTarget().setActive(false);
+            areaDrag[i].setBorder(emptyBorder);
+            areaDrag[i].setFont(new Font("Verdana", Font.PLAIN, 12));
+            areaDrag[i].setEditable(false);
+        }
         
-        areaDrag.getDropTarget().setActive(false);
-        areaDrag1.getDropTarget().setActive(false);
-        areaDrag2.getDropTarget().setActive(false);
-        areaDrag3.getDropTarget().setActive(false);
-        
-        areaDrag.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        areaDrag1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        areaDrag2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        areaDrag3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        
-        areaDrag.setFont(new Font("Verdana", Font.PLAIN, 12));
-        areaDrag1.setFont(new Font("Verdana", Font.PLAIN, 12));
-        areaDrag2.setFont(new Font("Verdana", Font.PLAIN, 12));
-        areaDrag3.setFont(new Font("Verdana", Font.PLAIN, 12));
-        
-        areaDrag.setText(".html, body, p{\n"
+        areaDrag[0].setText(".html, body, p{\n"
                 + "  padding: 0;\n"
                 + "  margin: 0;\n"
                 + "  font-size: 100%;\n"
                 + "  font-weight: normal;\n"
                 + "  font-style: normal;\n"
                 + "}\n");
-        areaDrag1.setText(".container{\n"
+        areaDrag[1].setText(".container{\n"
                 + "  \n"
                 + "}\n");
-        areaDrag2.setText("<!DOCTYPE html>\n" +
+        areaDrag[2].setText("<!DOCTYPE html>\n" +
                             "<html>\n" +
                             "  <head>\n" +
                             "    <meta charset=\"UTF-8\">\n" +
@@ -208,27 +200,30 @@ public class Senior_Project extends JFrame {
                             "  \n" +
                             "  </body>\n" +
                             "</html>");
-        areaDrag3.setText("<!--COMMENT-->>");
+        areaDrag[3].setText("<!--COMMENT-->>");
         
-        areaDrag.setEditable(false);
-        areaDrag1.setEditable(false);
-        areaDrag2.setEditable(false);
-        areaDrag3.setEditable(false);
         
-        JScrollPane scrollDrag = new JScrollPane(areaDrag, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        JScrollPane scrollDrag1 = new JScrollPane(areaDrag1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        JScrollPane scrollDrag2 = new JScrollPane(areaDrag2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        JScrollPane scrollDrag3 = new JScrollPane(areaDrag3, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollDrag = new JScrollPane(areaDrag[0], JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollDrag1 = new JScrollPane(areaDrag[1], JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollDrag2 = new JScrollPane(areaDrag[2], JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollDrag3 = new JScrollPane(areaDrag[3], JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        scrollDrag.setBorder(emptyBorder);
+        scrollDrag1.setBorder(emptyBorder);
+        scrollDrag2.setBorder(emptyBorder);
+        scrollDrag3.setBorder(emptyBorder);
         
         getContentPane().setLayout(new BorderLayout());
+        //getContentPane().setBorder(emptyBorder);
         
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(emptyBorder);
         dragPanel.setLayout(new BoxLayout(dragPanel, BoxLayout.Y_AXIS));
         dragPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.setBackground( Color.DARK_GRAY.darker().darker());
         dragPanel.setForeground(Color.white);
-        panel.add(new JScrollPane(scroll));
+        panel.add(scroll);
         
         JLabel dragLabel = new JLabel("Blank Canvas");
         dragLabel.setForeground(Color.white);
@@ -312,15 +307,21 @@ public class Senior_Project extends JFrame {
     }
     
     private void changeTheme(){
-        Font font = new Font("Verdana", Font.PLAIN, 12);
-        area.setFont(font);
-        area.setForeground(Color.WHITE);
-        area.setBackground(Color.DARK_GRAY.darker());
-        area.setCaretColor(Color.PINK);
-        area.setBorder(new CompoundBorder(
-            BorderFactory.createMatteBorder(0, 20, 0, 0, Color.DARK_GRAY.darker()), 
-            BorderFactory.createMatteBorder(10, 10, 10, 10, Color.DARK_GRAY.darker()))
-        );
+        if(theme == true){
+            area.setFont(new Font("Verdana", Font.PLAIN, 12));
+            area.setForeground(Color.WHITE);
+            area.setBackground(Color.DARK_GRAY.darker());
+            area.setBorder(new CompoundBorder(
+                BorderFactory.createMatteBorder(0, 20, 0, 0, Color.DARK_GRAY.darker()), 
+                BorderFactory.createMatteBorder(10, 10, 10, 10, Color.DARK_GRAY.darker()))
+            );
+            for(int i = 0; i < areaDrag.length; i++){
+                areaDrag[i].setForeground(Color.WHITE);
+                areaDrag[i].setBackground(Color.DARK_GRAY.darker());  
+            }
+        } else {
+            
+        }
     }
 
     private KeyListener k1 = new KeyAdapter() {
@@ -486,10 +487,15 @@ public class Senior_Project extends JFrame {
     }
     
     //hide/show button for dragPanel
-    Action dragPanelShowHide = new AbstractAction("dragPanelShowHide") {
+    Action dragPanelShowHide = new AbstractAction("Hide") {
             public void actionPerformed(ActionEvent e){
                     dragPanelVisible = !dragPanelVisible;
                     dragPanel.setVisible(dragPanelVisible);
+                    if(dragPanelVisible){
+                        dragPanelShowHide.putValue(Action.NAME, "Hide");
+                    } else {
+                        dragPanelShowHide.putValue(Action.NAME, "Show");
+                    }
             }
     };
     
@@ -497,27 +503,24 @@ public class Senior_Project extends JFrame {
     Action dragPanelEnableEdit = new AbstractAction("Edit") {
             public void actionPerformed(ActionEvent e){
                     dragPanelEdit = !dragPanelEdit;
-                    areaDrag.setEditable(dragPanelEdit);
-                    areaDrag1.setEditable(dragPanelEdit);
-                    areaDrag2.setEditable(dragPanelEdit);
-                    areaDrag3.setEditable(dragPanelEdit);
+                    for(int i = 0; i < areaDrag.length; i++){
+                        areaDrag[i].setEditable(dragPanelEdit);
+                    }
                     //remove or renable mouse listener mDrag
                     if(dragPanelEdit){
                         //change button text
                         dragPanelEnableEdit.putValue(Action.NAME, "Done");
                         //remove mouse listener mDrag
-                        areaDrag.removeMouseListener(mDrag);
-                        areaDrag1.removeMouseListener(mDrag);
-                        areaDrag2.removeMouseListener(mDrag);
-                        areaDrag3.removeMouseListener(mDrag);
+                        for(int i = 0; i < areaDrag.length; i++){
+                            areaDrag[i].removeMouseListener(mDrag);
+                        }
                     } else {
                         //change button text
                         dragPanelEnableEdit.putValue(Action.NAME, "Edit");
                         //renable mouse listener mDrag
-                        areaDrag.addMouseListener(mDrag);
-                        areaDrag1.addMouseListener(mDrag);
-                        areaDrag2.addMouseListener(mDrag);
-                        areaDrag3.addMouseListener(mDrag);
+                        for(int i = 0; i < areaDrag.length; i++){
+                            areaDrag[i].addMouseListener(mDrag);
+                        }
                     }
             }
     };
@@ -619,11 +622,6 @@ public class Senior_Project extends JFrame {
            JComponent jc = (JComponent)e.getSource();
            TransferHandler th = jc.getTransferHandler();
            th.exportAsDrag(jc, e, TransferHandler.COPY);
-           
-           areaDrag.setEnabled(true);
-           areaDrag1.setEnabled(true);
-           areaDrag2.setEnabled(true);
-           areaDrag3.setEnabled(true);
            
         }
         @Override
