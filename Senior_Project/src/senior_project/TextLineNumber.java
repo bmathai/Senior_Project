@@ -1,8 +1,6 @@
 package senior_project;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
 import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -74,7 +72,7 @@ public class TextLineNumber extends JPanel
 		setFont( component.getFont() );
 
 		setBorderGap( 5 );
-		setCurrentLineForeground( Color.magenta );
+		setCurrentLineForeground( Color.pink );
 		setDigitAlignment( RIGHT );
 		setMinimumDisplayDigits( minimumDisplayDigits );
 

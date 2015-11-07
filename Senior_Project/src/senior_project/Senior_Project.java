@@ -18,7 +18,8 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
-
+import javax.swing.*;
+import jsyntaxpane.*;
 /**
  *
  * @author Blaise Mathai
@@ -27,7 +28,9 @@ public class Senior_Project extends JFrame {
     
     private JPopupMenu popup;
 
-    public JTextArea area = new JTextArea();
+    public JTextPane area = new JTextPane();
+    public StyledDocument doc = area.getStyledDocument();
+    private final SyntaxHighlight syntaxhighlight = new SyntaxHighlight();
     public JTextArea areaDrag = new JTextArea();
     public JTextArea areaDrag1 = new JTextArea();
     public JTextArea areaDrag2 = new JTextArea();
@@ -59,17 +62,19 @@ public class Senior_Project extends JFrame {
             BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
             BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white))
         );
-        area.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        area.setFont(new Font("Verdana", Font.PLAIN, 12));
         area.setBackground(Color.white);
         area.setForeground(Color.getHSBColor(49, (float) 0.12, (float) .14));
         area.setCaretColor(Color.getHSBColor((float) .70, (float) .40, (float) .20));
+        //area.setTabSize(2);
         JScrollPane scroll = new JScrollPane(area, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         TextLineNumber tln = new TextLineNumber(area);
         scroll.setRowHeaderView(tln);
         add(scroll, BorderLayout.CENTER);
 
         JMenuBar JMB = new JMenuBar();
-
+        DefaultSyntaxKit.initKit();
         //custom look for menu bar
         //removeborders
         UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Color.getHSBColor((float) .70, (float) .40, (float) .20)));
@@ -99,11 +104,13 @@ public class Senior_Project extends JFrame {
         JMenu tools = new JMenu(" Tools ");//not finished
         JMenu comment = new JMenu(" Comment ");//not finished
         JMenu format = new JMenu(" Format ");//not finished
+        JMenu preferences = new JMenu(" Preferences ");//not finished
         JMB.add(file);
         JMB.add(edit);
         JMB.add(tools);//not finished
         JMB.add(comment);//finished
         JMB.add(format);//not finished
+        JMB.add(preferences);//not finished
         //JMB.add(dragPanelBool);
         
         JButton dragPanelEditButton = new JButton(dragPanelEnableEdit);
@@ -139,6 +146,8 @@ public class Senior_Project extends JFrame {
 
         format.add(cssCBC);
         format.add(csshtmlFormat);
+        
+        preferences.add(Change_Theme);
 
         Save.setEnabled(false);
         SaveAs.setEnabled(false);
@@ -278,7 +287,7 @@ public class Senior_Project extends JFrame {
         });
     }
 
-    private void multiPaste(){
+    private void multiPaste() throws BadLocationException{
         
         JPopupMenu multiPastePopup = new JPopupMenu();
         multiPastePopup.add(new JMenuItem("testing"));
@@ -287,8 +296,20 @@ public class Senior_Project extends JFrame {
         
         String selectedValue = mp.multiPaste(clipboard);
         if(selectedValue != null){
-            area.insert(selectedValue, area.getCaretPosition());
+            doc.insertString(area.getCaretPosition(), selectedValue, null);
         }
+    }
+    
+    private void changeTheme(){
+        Font font = new Font("Verdana", Font.BOLD, 12);
+        area.setFont(font);
+        area.setForeground(Color.WHITE);
+        area.setBackground(Color.DARK_GRAY.darker());
+        area.setCaretColor(Color.PINK);
+        area.setBorder(new CompoundBorder(
+            BorderFactory.createMatteBorder(0, 20, 0, 0, Color.DARK_GRAY.darker()), 
+            BorderFactory.createMatteBorder(10, 10, 10, 10, Color.DARK_GRAY.darker()))
+        );
     }
 
     private KeyListener k1 = new KeyAdapter() {
@@ -311,10 +332,18 @@ public class Senior_Project extends JFrame {
                 if (pressed.contains(17) && pressed.contains(16) && pressed.contains(67)){
                     pressed.clear();
                     if(fileType == "html"){
-                        insertComment(0);
+                        try {
+                            insertComment(0);
+                        } catch (BadLocationException ex) {
+                            Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else {
-                        insertComment(1);
+                        try {
+                            insertComment(1);
+                        } catch (BadLocationException ex) {
+                            Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
                 //ctrl+s --> save
@@ -338,7 +367,11 @@ public class Senior_Project extends JFrame {
                     pressed.clear();
                     String selectedValue = mp.multiPaste(clipboard);
                     if(selectedValue != null){
-                        area.insert(selectedValue, area.getCaretPosition());
+                        try {
+                            doc.insertString(area.getCaretPosition(), selectedValue, null);
+                        } catch (BadLocationException ex) {
+                            Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
                 //find/replace function
@@ -363,10 +396,18 @@ public class Senior_Project extends JFrame {
     Action addComment = new AbstractAction("Insert Comment") {
         public void actionPerformed(ActionEvent e) {
             if("html".equals(fileType)){
-                insertComment(0);
+                try {
+                    insertComment(0);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             else {
-                insertComment(1);
+                try {
+                    insertComment(1);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             changed = true;
             markDirty();
@@ -421,15 +462,15 @@ public class Senior_Project extends JFrame {
         }
     };
 
-    public void insertComment(int n) {
+    public void insertComment(int n) throws BadLocationException {
         if (n == 0) {
-            area.insert("<!--COMMENT-->", area.getCaretPosition());
+            doc.insertString(area.getCaretPosition(), "<!--COMMENT-->", null);
         }
         if (n == 1) {
-            area.insert("/*COMMENT*/", area.getCaretPosition());
+            doc.insertString(area.getCaretPosition(), "/*COMMENT*/", null);
         }
         if (n == 2) {
-            area.insert("/*COMMENT*/", area.getCaretPosition());
+            doc.insertString(area.getCaretPosition(), "/*COMMENT*/", null);
         }
     }
     
@@ -537,13 +578,23 @@ public class Senior_Project extends JFrame {
     
     Action MultiPaste = new AbstractAction("Multi-paste"){
         public void actionPerformed(ActionEvent e) {
-            multiPaste();
+            try {
+                multiPaste();
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     };
     
     Action Insert = new AbstractAction("Insert Link Element") {
         public void actionPerformed(ActionEvent e) {
             /*Do this later*/
+        }
+    };
+    
+    Action Change_Theme = new AbstractAction("Change Theme"){
+        public void actionPerformed(ActionEvent e) {
+            changeTheme();
         }
     };
     
@@ -597,6 +648,7 @@ public class Senior_Project extends JFrame {
         public synchronized void mouseReleased(MouseEvent e) {
             if (area.getSelectedText() != null){ //see if they selected something 
                 String s = area.getSelectedText();
+                s = s.replaceAll("\n","");
                 MultiHighlight mh = new MultiHighlight(area, s);
                     mh.highlight();
                     
@@ -677,6 +729,9 @@ public class Senior_Project extends JFrame {
             this.setTitle(dirtyTitle);
             this.dirty = true;
         }
+        //parse for color coding
+        //doc = syntaxhighlight.highlightSyntax(area, doc);
+        
     }
 
     public void markClean() {
@@ -713,17 +768,29 @@ public class Senior_Project extends JFrame {
         
         Action mpOption0 = new AbstractAction(shortClipboard[0]){
             public void actionPerformed(ActionEvent e) {
-                area.insert(clipboard[0], area.getCaretPosition());
+                try {
+                    doc.insertString(area.getCaretPosition(), clipboard[0], null);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         Action mpOption1 = new AbstractAction(shortClipboard[1]){
             public void actionPerformed(ActionEvent e) {
-                area.insert(clipboard[1], area.getCaretPosition());
+                try {
+                    doc.insertString(area.getCaretPosition(), clipboard[1], null);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         Action mpOption2 = new AbstractAction(shortClipboard[2]){
             public void actionPerformed(ActionEvent e) {
-                area.insert(clipboard[2], area.getCaretPosition());
+                try {
+                    doc.insertString(area.getCaretPosition(), clipboard[2], null);
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
         

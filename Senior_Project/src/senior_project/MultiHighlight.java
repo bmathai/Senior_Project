@@ -32,16 +32,20 @@ public class MultiHighlight {
         // highlight all characters that appear in charsToHighlight
         Highlighter h = comp.getHighlighter();
         String text = comp.getText();
+        text = text.replaceAll("\n","");
         
-        h.removeAllHighlights();
+        
 
         int offset = text.indexOf(charsToHighlight);
         int length = charsToHighlight.length();
         System.out.println("offset: " + offset);
+        
+        if(offset!= -1){
+            h.removeAllHighlights();
+        }
 
         while (offset != -1) {
             try {
-                System.out.println("help!");
                 h.addHighlight(offset, offset + length, highlightPainter);
                 offset = text.indexOf(charsToHighlight, offset + 1);
             } catch (BadLocationException ble) {
