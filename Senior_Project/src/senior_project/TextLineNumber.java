@@ -19,9 +19,21 @@ import javax.swing.text.*;
 public class TextLineNumber extends JPanel
 	implements CaretListener, DocumentListener
 {
-	public final static float LEFT = 0.0f;
-	public final static float CENTER = 0.5f;
-	public final static float RIGHT = 1.0f;
+
+    /**
+     *
+     */
+    public final static float LEFT = 0.0f;
+
+    /**
+     *
+     */
+    public final static float CENTER = 0.5f;
+
+    /**
+     *
+     */
+    public final static float RIGHT = 1.0f;
 
 	private final static Border OUTER = new MatteBorder(0, 0, 0, 0, Color.darkGray.darker().darker());
 
@@ -147,7 +159,7 @@ public class TextLineNumber extends JPanel
 	 *  <li>TextLineNumber.CENTER
 	 *  <li>TextLineNumber.RIGHT (default)
 	 *	</ul>
-	 *  @param currentLineForeground  the Color used to render the current line
+     * @param digitAlignment
 	 */
 	public void setDigitAlignment(float digitAlignment)
 	{
@@ -269,6 +281,13 @@ public class TextLineNumber extends JPanel
 	 *	Get the line number to be drawn. The empty string will be returned
 	 *  when a line of text has wrapped.
 	 */
+
+    /**
+     *
+     * @param rowStartOffset
+     * @return
+     */
+    
 	protected String getTextLineNumber(int rowStartOffset)
 	{
 		Element root = component.getDocument().getDefaultRootElement();

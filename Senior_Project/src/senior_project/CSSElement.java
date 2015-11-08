@@ -17,32 +17,59 @@ public class CSSElement {
     private List<CSSProperty> properties = new ArrayList<CSSProperty>(5);
     private String name = "";
     
+    /**
+     *
+     * @param n
+     */
     public CSSElement(String n){
         this.name = n;
     }
     
+    /**
+     *
+     * @param prop
+     */
     public void addProperty(CSSProperty prop){
         this.properties.add(prop);
     }
     
+    /**
+     *
+     * @param propName
+     * @return
+     */
     public CSSProperty getProperty(String propName){
+        CSSProperty prop = null;
         for(int i = 0; i < this.properties.size(); i++){
-            CSSProperty prop = this.properties.get(i);
+            prop = this.properties.get(i);
             if(prop.getName().trim().equals((propName).trim())){
                 return prop;
             }
         }
-        return null;
+        return prop;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getName(){
         return this.name;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<CSSProperty> getProperties(){
         return this.properties;
     }
     
+    /**
+     *
+     * @param prop
+     * @return
+     */
     public boolean hasProperty(String prop){
         for(int i = 0; i < properties.size(); i++){
             if(properties.get(i).getName().trim().equals(prop.trim())){
@@ -52,6 +79,11 @@ public class CSSElement {
         return false;
     }
     
+    /**
+     *
+     * @param prop
+     * @return
+     */
     public boolean hasMoreThanOneProperty(String prop){
         int num = 0;
         for(int i = 0; i < properties.size(); i++){
@@ -65,6 +97,10 @@ public class CSSElement {
         return false;
     }
     
+    /**
+     *
+     * @param prop
+     */
     public void removeFirstProperty(String prop){
         for(int i = 0; i < properties.size(); i++){
             if(properties.get(i).getName().trim().equals(prop.trim())){
@@ -74,6 +110,10 @@ public class CSSElement {
         }
     }
     
+    /**
+     *
+     * @param prop
+     */
     public void removeProperty(String prop){
         for(int i = 0; i < properties.size(); i++){
             if(properties.get(i).getName().trim().equals(prop.trim())){

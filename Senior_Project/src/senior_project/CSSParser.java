@@ -27,6 +27,10 @@ public class CSSParser {
     String originalContent;
     private List<CSSElement> cssElements = new ArrayList<CSSElement>(3);
     
+    /**
+     *
+     * @param f
+     */
     public CSSParser(String f){
         String aLine = "";
         
@@ -108,6 +112,10 @@ public class CSSParser {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public List<CSSElement> getCSSElements(){
         return this.cssElements;
     }

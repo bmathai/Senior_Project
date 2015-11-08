@@ -10,47 +10,64 @@ package senior_project;
  * @author Blaise Mathai
  */
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
+/**
+ *
+ * @author Blaise Mathai
+ */
 public class MultiHighlight {
 
-    private JTextComponent comp;
+    private JTextArea area;
 
-    private String charsToHighlight;
+    private String chars;
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter
-            = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+            = new DefaultHighlighter.DefaultHighlightPainter(Color.getHSBColor((float).72, (float).15, (float)1));
 
-    public MultiHighlight(JTextComponent c, String chars) {
-        comp = c;
-        charsToHighlight = chars;
+    /**
+     *
+     * @param a
+     * @param chars
+     */
+    public MultiHighlight(JTextArea a, String chars) {
+        this.chars = chars;
+        this.area = a;
     }
 
+    /**
+     *
+     */
     public void highlight() {
         // highlight all characters that appear in charsToHighlight
-        Highlighter h = comp.getHighlighter();
-        String text = comp.getText();
-        text = text.replaceAll("\n","");
-        
-        
-
-        int offset = text.indexOf(charsToHighlight);
-        int length = charsToHighlight.length();
-        System.out.println("offset: " + offset);
-        
-        if(offset!= -1){
-            h.removeAllHighlights();
+        Highlighter h = area.getHighlighter();
+        h.removeAllHighlights();
+        int pos = area.getText().indexOf(chars, 0);
+        if(chars.trim().length() < 1){
+           try {
+                h.addHighlight(pos ,
+                        pos  + chars.length(),
+                        highlightPainter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(MultiHighlight.class.getName()).log(Level.SEVERE, null, ex);
+            } 
         }
-
-        while (offset != -1) {
+        pos = area.getText().indexOf(chars, 0);
+        while((pos!=-1) &&  (chars.trim().length() > 0)){
             try {
-                h.addHighlight(offset, offset + length, highlightPainter);
-                offset = text.indexOf(charsToHighlight, offset + 1);
-            } catch (BadLocationException ble) {
-                System.out.println(ble);
+                h.addHighlight(pos ,
+                        pos  + chars.length(),
+                        highlightPainter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(MultiHighlight.class.getName()).log(Level.SEVERE, null, ex);
             }
+            pos = area.getText().indexOf(chars, pos+1);
         }
     }
 }
+

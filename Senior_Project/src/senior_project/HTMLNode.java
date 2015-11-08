@@ -17,20 +17,40 @@ public class HTMLNode {
     private HTMLNode parent;
     private String value;
 
+    /**
+     *
+     */
     public HTMLNode() {
     }
     
+    /**
+     *
+     * @return
+     */
     public ArrayList<HTMLNode> getChildren(){
         return this.children;
     }
     
+    /**
+     *
+     * @return
+     */
     public HTMLNode getParent(){
         return this.parent;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getValue(){
         return this.value;
     }
+
+    /**
+     *
+     * @param val
+     */
     public void setValue(String val){
         this.value = val;
     }

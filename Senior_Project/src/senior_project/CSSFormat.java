@@ -18,6 +18,10 @@ public class CSSFormat {
     CSSParser cssParser = null;
     String finalOut = "";
     
+    /**
+     *
+     * @param cssP
+     */
     public CSSFormat(CSSParser cssP){
         cssParser = cssP;
     }
@@ -38,6 +42,9 @@ public class CSSFormat {
         return finalOut;
     }
     
+    /**
+     *
+     */
     public void removeDuplicates(){
         for(int i = 0; i < cssParser.getCSSElements().size(); i++){
             for(int j = 0; j < cssParser.getCSSElements().get(i).getProperties().size(); j++){

@@ -26,6 +26,12 @@ public class SyntaxHighlight {
             AttributeSet blackText = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.black);
             AttributeSet greyText = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.gray);
             
+    /**
+     *
+     * @param area
+     * @param doc
+     * @return
+     */
     public StyledDocument highlightSyntax(JTextPane area, StyledDocument doc){
         String text = area.getText();
         int start;

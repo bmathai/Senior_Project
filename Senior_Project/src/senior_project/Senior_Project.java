@@ -30,18 +30,44 @@ public class Senior_Project extends JFrame {
     
     private JPopupMenu popup;
     private final Border emptyBorder = BorderFactory.createEmptyBorder();
-    private final boolean theme = true;
-    public JTextPane area = new JTextPane();
-    public StyledDocument doc = area.getStyledDocument();
-    private final SyntaxHighlight syntaxhighlight = new SyntaxHighlight();
+    private boolean theme = true;
+
+    /**
+     *
+     */
+    public JTextArea area = new JTextArea();
     private final JTextArea[] areaDrag = new JTextArea[4];
-    public JPanel dragPanel = new JPanel();
-    public Boolean dragPanelVisible = true;
-    public Boolean dragPanelEdit = false;
+    private JPanel panel = new JPanel();
+    
+    private JPanel dragPanel = new JPanel();
+    private Boolean dragPanelVisible = true;
+    private Boolean dragPanelEdit = false;
+    private JButton dragPanelEditButton;
+    private JButton dragPanelBoolButton;
+    
+    private JPanel footer;
+    private Boolean footerVisible;
+    private JButton footerBoolButton;
+    private JButton footerFindButton;
+    private JButton footerReplaceButton;
+    private JTextField find;
+    private JTextField replace;
+    private JLabel findLabel;
+    private JLabel replaceLabel;
+    
+    
     private JFileChooser dialog = new JFileChooser(System.getProperty("user.dir"));
+
+    /**
+     *
+     */
     public String currentFile = "Untitled";
     private boolean changed = false;
     private boolean dirty = false;
+
+    /**
+     *
+     */
     public String currentPath = null;
     private CSSParser cssParser = null;
     private HTMLParser htmlParser = null;
@@ -51,7 +77,11 @@ public class Senior_Project extends JFrame {
     Multipaste mp = new Multipaste();
     
     //constructor
-    public Senior_Project() {
+
+    /**
+     *
+     */
+        public Senior_Project() {
         clipboard[0] = "";
         clipboard[1] = "";
         clipboard[2] = "";
@@ -61,8 +91,13 @@ public class Senior_Project extends JFrame {
         areaDrag[3] = new JTextArea();
         area.setBorder(null);
         area.setBorder(emptyBorder);
+        
+        footerVisible = true;
     }
 
+    /**
+     *
+     */
     public void Editor() {
         area.setBorder(new CompoundBorder(
             BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
@@ -121,8 +156,8 @@ public class Senior_Project extends JFrame {
         JMB.add(preferences);//not finished
         //JMB.add(dragPanelBool);
         
-        JButton dragPanelEditButton = new JButton(dragPanelEnableEdit);
-        JButton dragPanelBoolButton = new JButton(dragPanelShowHide);
+        dragPanelEditButton = new JButton(dragPanelEnableEdit);
+        dragPanelBoolButton = new JButton(dragPanelShowHide);
         JMB.add(Box.createHorizontalGlue());
         JMB.add(dragPanelBoolButton);
         JMB.add(dragPanelEditButton);
@@ -177,30 +212,40 @@ public class Senior_Project extends JFrame {
         }
         
         areaDrag[0].setText(".html, body, p{\n"
-                + "  padding: 0;\n"
-                + "  margin: 0;\n"
-                + "  font-size: 100%;\n"
-                + "  font-weight: normal;\n"
-                + "  font-style: normal;\n"
-                + "}\n");
+                        + "  padding: 0;\n"
+                        + "  margin: 0;\n"
+                        + "  font-size: 100%;\n"
+                        + "  font-weight: normal;\n"
+                        + "  font-style: normal;\n"
+                        + "}\n");
         areaDrag[1].setText(".container{\n"
-                + "  \n"
-                + "}\n");
+                        + "  \n"
+                        + "}\n");
         areaDrag[2].setText("<!DOCTYPE html>\n" +
-                            "<html>\n" +
-                            "  <head>\n" +
-                            "    <meta charset=\"UTF-8\">\n" +
-                            "    <title>title</title>\n" +
-                            "  <meta name=\"author\" content=\"name\">\n" +
-                            "  <meta name=\"description\" content=\"description here\">\n" +
-                            "  <meta name=\"keywords\" content=\"keywords,here\">\n" +
-                            "  <link rel=\"stylesheet\" href=\"stylesheet.css\" type=\"text/css\">\n" +
-                            "  </head>\n" +
-                            "  <body>\n" +
-                            "  \n" +
-                            "  </body>\n" +
-                            "</html>");
-        areaDrag[3].setText("<!--COMMENT-->>");
+                        "<html>\n" +
+                        "  <head>\n" +
+                        "    <meta charset=\"UTF-8\">\n" +
+                        "    <title>title</title>\n" +
+                        "  </head>\n" +
+                        "  <body>\n" +
+                        "  \n" +
+                        "  </body>\n" +
+                        "</html>");
+        areaDrag[3].setText("<!DOCTYPE html>\n" +
+                        "<html>\n" +
+                        "  <head>\n" +
+                        "    <meta charset=\"UTF-8\">\n" +
+                        "    <title>title</title>\n" +
+                        "  <meta name=\"author\" content=\"name\">\n" +
+                        "  <meta name=\"description\" content=\"description here\">\n" +
+                        "  <meta name=\"keywords\" content=\"keywords,here\">\n" +
+                        "  <link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n" +
+                        "  <link rel=\"stylesheet\" href=\"stylesheet.css\" type=\"text/css\">\n" +
+                        "  </head>\n" +
+                        "  <body>\n" +
+                        "  \n" +
+                        "  </body>\n" +
+                        "</html>");
         
         
         JScrollPane scrollDrag = new JScrollPane(areaDrag[0], JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -214,18 +259,40 @@ public class Senior_Project extends JFrame {
         scrollDrag3.setBorder(emptyBorder);
         
         getContentPane().setLayout(new BorderLayout());
-        //getContentPane().setBorder(emptyBorder);
         
-        JPanel panel = new JPanel();
+        //footer
+        footer = new JPanel();
+        footer.setLayout(new BoxLayout(footer, BoxLayout.X_AXIS));
+        footer.setPreferredSize(new Dimension(800, 30));
+        footer.setBackground( Color.DARK_GRAY.darker().darker());
+        //button
+        footerBoolButton = new JButton(dragPanelShowHide);
+        footerFindButton = new JButton(footerFind);
+        footerReplaceButton = new JButton(footerReplace);
+        //text fields find replace
+        find = new JTextField("", 20);
+        find.setBorder(BorderFactory.createMatteBorder(4, 10, 4, 10, Color.DARK_GRAY.darker().darker()));
+        replace = new JTextField("", 20);
+        replace.setBorder(BorderFactory.createMatteBorder(4, 10, 4, 10, Color.DARK_GRAY.darker().darker()));
+        //add content to footer
+        footer.add(footerBoolButton);
+        footer.add(footerFindButton);
+        footer.add(find);
+        footer.add(footerReplaceButton);
+        footer.add(replace);
+        
+        
+        
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(emptyBorder);
+        panel.add(scroll);
+        
         dragPanel.setLayout(new BoxLayout(dragPanel, BoxLayout.Y_AXIS));
         dragPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.setBackground( Color.DARK_GRAY.darker().darker());
         dragPanel.setForeground(Color.white);
-        panel.add(scroll);
         
-        JLabel dragLabel = new JLabel("Blank Canvas");
+        JLabel dragLabel = new JLabel("CSS Blank Canvas");
         dragLabel.setForeground(Color.white);
         dragLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.add(dragLabel);
@@ -235,19 +302,21 @@ public class Senior_Project extends JFrame {
         dragLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.add(dragLabel);
         dragPanel.add(scrollDrag1);
-        dragLabel = new JLabel("HTML Skeleton");
+        dragLabel = new JLabel("HTML Basic Skeleton");
         dragLabel.setForeground(Color.white);
         dragLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.add(dragLabel);
         dragPanel.add(scrollDrag2);
-        dragLabel = new JLabel("In Progress");
+        dragLabel = new JLabel("HTML Full Skeleton");
         dragLabel.setForeground(Color.white);
         dragLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         dragPanel.add(dragLabel);
         dragPanel.add(scrollDrag3);
         dragPanel.setPreferredSize(new Dimension(200, 600));
+        
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(dragPanel, BorderLayout.EAST);
+        getContentPane().add(footer, BorderLayout.SOUTH);
         
         pack();
     }
@@ -302,12 +371,14 @@ public class Senior_Project extends JFrame {
         
         String selectedValue = mp.multiPaste(clipboard);
         if(selectedValue != null){
-            doc.insertString(area.getCaretPosition(), selectedValue, null);
+            area.insert(selectedValue, area.getCaretPosition());
         }
     }
     
-    private void changeTheme(){
+    private void changeTheme() throws BadLocationException{
         if(theme == true){
+            theme = false;
+            area.insert("_", 0);
             area.setFont(new Font("Verdana", Font.PLAIN, 12));
             area.setForeground(Color.WHITE);
             area.setBackground(Color.DARK_GRAY.darker());
@@ -315,12 +386,24 @@ public class Senior_Project extends JFrame {
                 BorderFactory.createMatteBorder(0, 20, 0, 0, Color.DARK_GRAY.darker()), 
                 BorderFactory.createMatteBorder(10, 10, 10, 10, Color.DARK_GRAY.darker()))
             );
+            area.replaceRange(null, 0, 1);
             for(int i = 0; i < areaDrag.length; i++){
                 areaDrag[i].setForeground(Color.WHITE);
                 areaDrag[i].setBackground(Color.DARK_GRAY.darker());  
             }
         } else {
-            
+            theme = true;
+            area.setBorder(new CompoundBorder(
+                BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
+                BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white))
+            );
+            area.setFont(new Font("Verdana", Font.PLAIN, 12));
+            area.setBackground(Color.white);
+            area.setForeground(Color.DARK_GRAY.darker());
+            for(int i = 0; i < areaDrag.length; i++){
+                areaDrag[i].setForeground(Color.DARK_GRAY.darker());
+                areaDrag[i].setBackground(Color.white);  
+            }
         }
     }
 
@@ -379,17 +462,13 @@ public class Senior_Project extends JFrame {
                     pressed.clear();
                     String selectedValue = mp.multiPaste(clipboard);
                     if(selectedValue != null){
-                        try {
-                            doc.insertString(area.getCaretPosition(), selectedValue, null);
-                        } catch (BadLocationException ex) {
-                            Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        area.insert(selectedValue, area.getCaretPosition());
                     }
                 }
                 //find/replace function
                 else if(pressed.contains(17) && pressed.contains(70)){
-                    MultiHighlight mh = new MultiHighlight(area, "aeiouAEIOU");
-                    mh.highlight();
+//                    MultiHighlight mh = new MultiHighlight(area, "aeiouAEIOU");
+//                    mh.highlight();
                 }
             }
         }
@@ -474,15 +553,22 @@ public class Senior_Project extends JFrame {
         }
     };
 
+    /**
+     *
+     * @param n
+     * @throws BadLocationException
+     */
     public void insertComment(int n) throws BadLocationException {
         if (n == 0) {
-            doc.insertString(area.getCaretPosition(), "<!--COMMENT-->", null);
+            System.out.println(area.getCaretPosition());
+            area.insert("<!--COMMENT-->", area.getCaretPosition());
         }
         if (n == 1) {
-            doc.insertString(area.getCaretPosition(), "/*COMMENT*/", null);
+            System.out.println(area.getCaretPosition());
+            area.insert("/*COMMENT*/", area.getCaretPosition());
         }
         if (n == 2) {
-            doc.insertString(area.getCaretPosition(), "/*COMMENT*/", null);
+            area.insert("/*COMMENT*/", area.getCaretPosition());
         }
     }
     
@@ -608,11 +694,36 @@ public class Senior_Project extends JFrame {
     
     Action Change_Theme = new AbstractAction("Change Theme"){
         public void actionPerformed(ActionEvent e) {
-            changeTheme();
+            try {
+                changeTheme();
+            } catch (BadLocationException ex) {
+                Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     };
     
+    Action footerFind = new AbstractAction("Find:"){
+        public void actionPerformed(ActionEvent e) {
+            find(find.getText());
+        }
+    };
     
+    Action footerReplace = new AbstractAction("Replace With:"){
+        public void actionPerformed(ActionEvent e) {
+            findAndReplace(find.getText(), replace.getText());
+        }
+    };
+    
+    private void find(String str){
+       MultiHighlight mh = new MultiHighlight(area, str);
+       mh.highlight();
+    }
+    
+    private void findAndReplace(String find, String replace){
+       FindReplace fp = new FindReplace(area, find, replace);
+       area = fp.replaceString();
+    }
+
     private MouseListener mDrag = new MouseAdapter(){
         @Override
         public synchronized void mousePressed(MouseEvent e) {
@@ -644,8 +755,6 @@ public class Senior_Project extends JFrame {
                rightClickBox();
            }
            if(e.getButton() == 1){
-               //MultiHighlight mh = new MultiHighlight(area, "aeiouAEIOU");
-                   // mh.highlight();
            }
         }
         
@@ -658,7 +767,6 @@ public class Senior_Project extends JFrame {
         public synchronized void mouseReleased(MouseEvent e) {
             if (area.getSelectedText() != null){ //see if they selected something 
                 String s = area.getSelectedText();
-                s = s.replaceAll("\n","");
                 MultiHighlight mh = new MultiHighlight(area, s);
                     mh.highlight();
                     
@@ -676,12 +784,18 @@ public class Senior_Project extends JFrame {
         }
     };
 
+    /**
+     *
+     */
     public void saveFileAs() {
         if (dialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             saveFile(dialog.getSelectedFile().getAbsolutePath());
         }
     }
 
+    /**
+     *
+     */
     public void saveOld() {
         if (changed) {
             if (JOptionPane.showConfirmDialog(this, "Wait! Would you like to save " + currentFile + "?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -704,6 +818,10 @@ public class Senior_Project extends JFrame {
         }
     }
 
+    /**
+     *
+     * @param fileName
+     */
     public void saveFile(String fileName) {
         try {
             FileWriter w = new FileWriter(fileName);
@@ -719,6 +837,9 @@ public class Senior_Project extends JFrame {
         }
     }
     
+    /**
+     *
+     */
     public void runParser(){
         String currentType = currentPath.substring(currentPath.length() - 3);            
             if(currentType.equals("css")){
@@ -733,6 +854,9 @@ public class Senior_Project extends JFrame {
             }
     }
 
+    /**
+     *
+     */
     public void markDirty() {
         if (!this.dirty) {
             String dirtyTitle = this.getTitle() + "*";
@@ -744,12 +868,18 @@ public class Senior_Project extends JFrame {
         
     }
 
+    /**
+     *
+     */
     public void markClean() {
         if (this.dirty) {
             this.dirty = false;
         }
     }
     
+    /**
+     *
+     */
     public void rightClickBox(){
         popup = new JPopupMenu();
         popup.setVisible(true);
@@ -778,29 +908,17 @@ public class Senior_Project extends JFrame {
         
         Action mpOption0 = new AbstractAction(shortClipboard[0]){
             public void actionPerformed(ActionEvent e) {
-                try {
-                    doc.insertString(area.getCaretPosition(), clipboard[0], null);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    area.insert(clipboard[0], area.getCaretPosition());
             }
         };
         Action mpOption1 = new AbstractAction(shortClipboard[1]){
             public void actionPerformed(ActionEvent e) {
-                try {
-                    doc.insertString(area.getCaretPosition(), clipboard[1], null);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                area.insert(clipboard[1], area.getCaretPosition());
             }
         };
         Action mpOption2 = new AbstractAction(shortClipboard[2]){
             public void actionPerformed(ActionEvent e) {
-                try {
-                    doc.insertString(area.getCaretPosition(), clipboard[2], null);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(Senior_Project.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                area.insert(clipboard[2], area.getCaretPosition());
             }
         };
         
@@ -821,6 +939,10 @@ public class Senior_Project extends JFrame {
         
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Senior_Project sp = new Senior_Project();
         sp.Editor();

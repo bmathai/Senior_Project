@@ -17,15 +17,27 @@ public class HTMLParser {
     
     private Document doc;
     
+    /**
+     *
+     * @param f
+     */
     public HTMLParser(String f){
             doc = Jsoup.parse(f);
             System.out.println(doc.toString());
     }
     
+    /**
+     *
+     * @return
+     */
     public Document getHTMLDoc(){
         return doc;
     }
     
+    /**
+     *
+     * @return
+     */
     public String cleanHTML(){
         return doc.normalise().toString();
     }

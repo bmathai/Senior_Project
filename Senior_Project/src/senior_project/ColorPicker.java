@@ -9,10 +9,17 @@ import java.awt.Color;
 import javax.swing.*;
 import javax.swing.colorchooser.*;
 
+/**
+ *
+ * @author Blaise Mathai
+ */
 public class ColorPicker {
 
     private JFrame frame = new JFrame("Lavender Editor - Hex Color Picker");
 
+    /**
+     *
+     */
     public ColorPicker() {
         //color picker stuff
         JPanel colorPan = new JPanel();

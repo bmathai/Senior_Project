@@ -18,6 +18,11 @@ import javax.swing.JPopupMenu;
  */
 public class Multipaste {
 
+    /**
+     *
+     * @param clipboard
+     * @return
+     */
     public String multiPaste(String[] clipboard){
         String[] shortClipboard = new String [3];
         for(int i = 0; i < clipboard.length; i++){

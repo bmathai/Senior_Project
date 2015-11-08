@@ -25,7 +25,14 @@ public class CBC {
     String lineCSS = "";
 
     //Our main stuff
-    public String cbc(CSSParser cssP, String currentP) {
+
+    /**
+     *
+     * @param cssP
+     * @param currentP
+     * @return
+     */
+        public String cbc(CSSParser cssP, String currentP) {
 
         //final JTextArea textA = textArea;
         JOptionPane.showMessageDialog(null, "Your file will now be made compatible with popular browsers");

@@ -13,6 +13,11 @@ package senior_project;
 public class HTMLTree {
     private HTMLNode root;
     
+    /**
+     *
+     * @param newValue
+     * @param path
+     */
     public void placeNode(String newValue, int[] path){
         HTMLNode current = root;
         for(int i = 0; i < path.length; i++){
