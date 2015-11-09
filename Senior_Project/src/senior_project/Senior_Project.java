@@ -21,20 +21,28 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import jsyntaxpane.*;
 /**
  *
  * @author Blaise Mathai
+ */
+/**
+ *  This class is the main class for Lavender Text Editor. It
+ *  initiates the GUI and responds to user's interaction with
+ *  the software.
  */
 public class Senior_Project extends JFrame {
     
     private JPopupMenu popup;
     private final Border emptyBorder = BorderFactory.createEmptyBorder();
     private boolean theme = true;
+    
+    public final UndoManager undo = new UndoManager();
 
-    /**
-     *
-     */
     public JTextArea area = new JTextArea();
     private final JTextArea[] areaDrag = new JTextArea[4];
     private JPanel panel = new JPanel();
@@ -99,6 +107,27 @@ public class Senior_Project extends JFrame {
      *
      */
     public void Editor() {
+        
+         area.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent evt) {
+              undo.addEdit(evt.getEdit());
+            }
+          });
+        
+        area.getActionMap().put("Undo", new AbstractAction("Undo") {
+            public void actionPerformed(ActionEvent evt) {
+              try {
+                if (undo.canUndo()) {
+                  undo.undo();
+                }
+              } catch (CannotUndoException e) {
+              }
+            }
+          });
+        
+        area.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo");
+        
         area.setBorder(new CompoundBorder(
             BorderFactory.createMatteBorder(0, 20, 0, 0, Color.white), 
             BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white))
@@ -266,7 +295,7 @@ public class Senior_Project extends JFrame {
         footer.setPreferredSize(new Dimension(800, 30));
         footer.setBackground( Color.DARK_GRAY.darker().darker());
         //button
-        footerBoolButton = new JButton(dragPanelShowHide);
+        footerBoolButton = new JButton(footerHide);
         footerFindButton = new JButton(footerFind);
         footerReplaceButton = new JButton(footerReplace);
         //text fields find replace
@@ -406,6 +435,7 @@ public class Senior_Project extends JFrame {
             }
         }
     }
+    
 
     private KeyListener k1 = new KeyAdapter() {
         @Override
@@ -582,6 +612,14 @@ public class Senior_Project extends JFrame {
                     } else {
                         dragPanelShowHide.putValue(Action.NAME, "Show");
                     }
+            }
+    };
+    
+    //hide/show footer
+    Action footerHide = new AbstractAction("Hide") {
+            public void actionPerformed(ActionEvent e){
+                    footerVisible = !footerVisible;
+                    footer.setVisible(footerVisible);
             }
     };
     

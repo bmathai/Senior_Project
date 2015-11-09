@@ -19,8 +19,7 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 
 /**
- *
- * @author Blaise Mathai
+ *  This class highlights a given string everywhere in the given JTextArea.
  */
 public class MultiHighlight {
 
