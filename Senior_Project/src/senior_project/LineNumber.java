@@ -7,16 +7,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 
-/**
- *  This class will display line numbers for a related text component. The text
- *  component must use the same line height for each line. TextLineNumber
- *  supports wrapped lines and will highlight the line number of the current
- *  line in the text component.
- *
- *  This class was designed to be used as a component added to the row header
- *  of a JScrollPane.
- */
-public class TextLineNumber extends JPanel
+public class LineNumber extends JPanel
 	implements CaretListener, DocumentListener
 {
 
@@ -39,7 +30,7 @@ public class TextLineNumber extends JPanel
 
 	private final static int HEIGHT = Integer.MAX_VALUE - 1000000;
 
-	//  Text component this TextTextLineNumber component is in sync with
+	//  Text component this LineNumber component is in sync with
 
 	private JTextComponent component;
 
@@ -65,7 +56,7 @@ public class TextLineNumber extends JPanel
 	 *
 	 *  @param component  the related text component
 	 */
-	public TextLineNumber(JTextComponent component)
+	public LineNumber(JTextComponent component)
 	{
 		this(component, 3);
 	}
@@ -77,7 +68,7 @@ public class TextLineNumber extends JPanel
 	 *  @param minimumDisplayDigits  the number of digits used to calculate
 	 *                               the minimum width of the component
 	 */
-	public TextLineNumber(JTextComponent component, int minimumDisplayDigits)
+	public LineNumber(JTextComponent component, int minimumDisplayDigits)
 	{
                 setBorder(BorderFactory.createEmptyBorder());
 		this.component = component;
@@ -89,7 +80,7 @@ public class TextLineNumber extends JPanel
 
 		setBorderGap( 5 );
 		setCurrentLineForeground( Color.magenta );
-		setDigitAlignment( RIGHT );
+                digitAlignment = RIGHT > 1.0f ? 1.0f : RIGHT < 0.0f ? -1.0f : RIGHT;
 		setMinimumDisplayDigits( minimumDisplayDigits );
 
 		component.getDocument().addDocumentListener(this);
@@ -112,10 +103,10 @@ public class TextLineNumber extends JPanel
 	 *
 	 *  @param borderGap  the gap in pixels
 	 */
-	public void setBorderGap(int borderGap)
+	public void setBorderGap(int gap)
 	{
-		this.borderGap = borderGap;
-		Border inner = new EmptyBorder(0, borderGap, 0, borderGap);
+		this.borderGap = gap;
+		Border inner = new EmptyBorder(0, gap, 0, gap);
 		setBorder( new CompoundBorder(OUTER, inner) );
 		lastDigits = 0;
 		setPreferredWidth();
@@ -139,32 +130,6 @@ public class TextLineNumber extends JPanel
 	public void setCurrentLineForeground(Color currentLineForeground)
 	{
 		this.currentLineForeground = currentLineForeground;
-	}
-
-	/**
-	 *  Gets the digit alignment
-	 *
-	 *  @return the alignment of the painted digits
-	 */
-	public float getDigitAlignment()
-	{
-		return digitAlignment;
-	}
-
-	/**
-	 *  Specify the horizontal alignment of the digits within the component.
-	 *  Common values would be:
-	 *  <ul>
-	 *  <li>TextLineNumber.LEFT
-	 *  <li>TextLineNumber.CENTER
-	 *  <li>TextLineNumber.RIGHT (default)
-	 *	</ul>
-     * @param digitAlignment
-	 */
-	public void setDigitAlignment(float digitAlignment)
-	{
-		this.digitAlignment =
-			digitAlignment > 1.0f ? 1.0f : digitAlignment < 0.0f ? -1.0f : digitAlignment;
 	}
 
 	/**
@@ -248,7 +213,7 @@ public class TextLineNumber extends JPanel
     			//  Get the line number as a string and then determine the
     			//  "X" and "Y" offsets for drawing the string.
 
-    			String lineNumber = getTextLineNumber(rowStartOffset);
+    			String lineNumber = getLineNumber(rowStartOffset);
     			int stringWidth = fontMetrics.stringWidth( lineNumber );
     			int x = getOffsetX(availableWidth, stringWidth) + insets.left;
 				int y = getOffsetY(rowStartOffset, fontMetrics);
@@ -288,7 +253,7 @@ public class TextLineNumber extends JPanel
      * @return
      */
     
-	protected String getTextLineNumber(int rowStartOffset)
+	protected String getLineNumber(int rowStartOffset)
 	{
 		Element root = component.getDocument().getDefaultRootElement();
 		int index = root.getElementIndex( rowStartOffset );

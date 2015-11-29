@@ -41,8 +41,14 @@ public class Senior_Project extends JFrame {
     private final Border emptyBorder = BorderFactory.createEmptyBorder();
     private boolean theme = true;
     
+    /**
+     *
+     */
     public final UndoManager undo = new UndoManager();
 
+    /**
+     *
+     */
     public JTextArea area = new JTextArea();
     private final JTextArea[] areaDrag = new JTextArea[4];
     private JPanel panel = new JPanel();
@@ -140,7 +146,7 @@ public class Senior_Project extends JFrame {
         JScrollPane scroll = new JScrollPane(area, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.setBorder(emptyBorder);
         scroll.setBorder(null);
-        TextLineNumber tln = new TextLineNumber(area);
+        LineNumber tln = new LineNumber(area);
         scroll.setRowHeaderView(tln);
         add(scroll, BorderLayout.CENTER);
 
@@ -186,7 +192,12 @@ public class Senior_Project extends JFrame {
         //JMB.add(dragPanelBool);
         
         dragPanelEditButton = new JButton(dragPanelEnableEdit);
+        dragPanelEditButton.setBackground(Color.DARK_GRAY.darker().darker());
+        dragPanelEditButton.setForeground(Color.white);
         dragPanelBoolButton = new JButton(dragPanelShowHide);
+        dragPanelBoolButton.setBackground(Color.DARK_GRAY.darker().darker());
+        dragPanelBoolButton.setForeground(Color.white);
+        
         JMB.add(Box.createHorizontalGlue());
         JMB.add(dragPanelBoolButton);
         JMB.add(dragPanelEditButton);
@@ -298,6 +309,12 @@ public class Senior_Project extends JFrame {
         footerBoolButton = new JButton(footerHide);
         footerFindButton = new JButton(footerFind);
         footerReplaceButton = new JButton(footerReplace);
+        footerBoolButton.setBackground(Color.DARK_GRAY.darker().darker());
+        footerBoolButton.setForeground(Color.white);
+        footerFindButton.setBackground(Color.DARK_GRAY.darker().darker());
+        footerFindButton.setForeground(Color.white);
+        footerReplaceButton.setBackground(Color.DARK_GRAY.darker().darker());
+        footerReplaceButton.setForeground(Color.white);
         //text fields find replace
         find = new JTextField("", 20);
         find.setBorder(BorderFactory.createMatteBorder(4, 10, 4, 10, Color.DARK_GRAY.darker().darker()));
@@ -453,6 +470,11 @@ public class Senior_Project extends JFrame {
                 while (iter.hasNext()) {
                     System.out.println(iter.next());
                 }
+                //ctrl+f --> find/replace show/hide
+                if (pressed.contains(17) && pressed.contains(70)){
+                    pressed.clear();
+                    hideFooter();
+                }
                 //ctrl+shift+c --> insert comment
                 if (pressed.contains(17) && pressed.contains(16) && pressed.contains(67)){
                     pressed.clear();
@@ -553,7 +575,7 @@ public class Senior_Project extends JFrame {
     };
 
     Action csshtmlFormat = new AbstractAction("Format") {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) throws NullPointerException{
             boolean saved = false;
             runParser();
                 if ("css".equals(fileType)){
@@ -618,10 +640,13 @@ public class Senior_Project extends JFrame {
     //hide/show footer
     Action footerHide = new AbstractAction("Hide") {
             public void actionPerformed(ActionEvent e){
-                    footerVisible = !footerVisible;
-                    footer.setVisible(footerVisible);
+                    hideFooter();
             }
     };
+    private void hideFooter(){
+        footerVisible = !footerVisible;
+                    footer.setVisible(footerVisible);
+    }
     
     //dragPanelEnableEdit
     Action dragPanelEnableEdit = new AbstractAction("Edit") {
@@ -878,7 +903,7 @@ public class Senior_Project extends JFrame {
     /**
      *
      */
-    public void runParser(){
+    public void runParser() throws NullPointerException{
         String currentType = currentPath.substring(currentPath.length() - 3);            
             if(currentType.equals("css")){
                 fileType = "css";
